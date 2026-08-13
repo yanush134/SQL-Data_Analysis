@@ -53,9 +53,9 @@
         COUNT(DISTINCT order_number) AS total_orders,
         COUNT(DISTINCT customer_key) AS total_customers,
         SUM(quantity ) AS total_quantity,
-        SUM(cost) AS total_sales,
+        SUM(sales_amount) AS total_sales,
         MAX(order_date) AS last_order,
-        ROUND(AVG(sales_amount/quantity),1) AS avg_selling_price,
+        ROUND(AVG(sales_amount/NULLIF(quantity,0),1) AS avg_selling_price,
         (extract(YEAR FROM age(max(order_date),MIN(order_date))) * 12 + extract(MONTH FROM age(max(order_date), MIN(order_date)))) AS lifespan
     FROM query_1
     GROUP BY 
@@ -81,7 +81,6 @@ SELECT
 		WHEN total_sales >= 10000 THEN 'Mid-Range'
 		ELSE 'Low-Performer'
 	END AS product_segment,
-	lifespan,
 	total_orders,
 	total_sales,
 	total_quantity,
